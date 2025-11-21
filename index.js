@@ -23,13 +23,12 @@ const io = new Server(server, { cors: { origin: '*' } });
 // CORS for Vercel frontend
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      "https://kiosk-project-zeta.vercel.app"], // replace with actual
+    origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
+
 
 app.use(bodyParser.json());
 
@@ -85,7 +84,6 @@ const storage = new CloudinaryStorage({
   },
 });
 const upload = multer({ storage });
-
 
 // =============================
 // 🔹 API Routes
