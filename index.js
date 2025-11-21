@@ -155,6 +155,7 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
     io.to(kioskId).emit('fileReceived', {
       filename: req.file.filename,
       url: fileUrl,
+      size: req.file.size
     });       
 
     res.json({
