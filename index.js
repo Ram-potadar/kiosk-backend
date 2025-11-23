@@ -148,28 +148,36 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
 
-    const fileUrl =  req.file.path; 
-
-    // Emit event to kiosk room
+    const fileUrl = req.file.path; // Cloudinary URL
     const kioskId = req.body.kioskId;
+
+    // Basic validation
+    if (!kioskId) {
+      return res.status(400).json({ error: 'Missing kioskId in form data' });
+    }
+
+    // Emit event to kiosk room with consistent fields
     io.to(kioskId).emit('fileReceived', {
       filename: req.file.originalname,
       url: fileUrl,
-      size: req.file.size
-    });       
+      fileUrl: fileUrl,
+      size: req.file.size,
+    });
 
+    // respond with matching field names the frontend expects
     res.json({
       success: true,
       message: 'File uploaded successfully',
-      file: req.file.filename,
-      url: fileUrl  
+      file: req.file.originalname,
+      fileUrl: fileUrl,
+      size: req.file.size
     });
-
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message });
   }
 });
+
 
 
 // Print endpoint
