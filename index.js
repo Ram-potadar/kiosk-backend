@@ -153,7 +153,7 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
     // Emit event to kiosk room
     const kioskId = req.body.kioskId;
     io.to(kioskId).emit('fileReceived', {
-      filename: req.file.filename,
+      filename: req.file.originalname,
       url: fileUrl,
       size: req.file.size
     });       
@@ -162,7 +162,7 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
       success: true,
       message: 'File uploaded successfully',
       file: req.file.filename,
-      url: fileUrl
+      url: fileUrl  
     });
 
   } catch (err) {
